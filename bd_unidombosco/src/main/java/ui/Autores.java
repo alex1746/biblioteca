@@ -13,6 +13,7 @@ public class Autores extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2));
 
