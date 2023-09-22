@@ -29,7 +29,7 @@ public class BookCRUD extends JFrame {
         panel.add(textFieldYear);
 
         addButton = new JButton("Adicionar");
-        updateButton = new JButton("Atualizar");
+        updateButton = new JButton("Editar");
         deleteButton = new JButton("Deletar");
         listButton = new JButton("Listar");
 
@@ -39,7 +39,7 @@ public class BookCRUD extends JFrame {
         panel.add(listButton);
 
         addButton.addActionListener(e -> System.out.println("Adicionando livro: " + textFieldBookName.getText()));
-        updateButton.addActionListener(e -> System.out.println("Atualizando livro: " + textFieldBookName.getText()));
+        updateButton.addActionListener(e -> System.out.println("Editando livro: " + textFieldBookName.getText()));
         deleteButton.addActionListener(e -> System.out.println("Deletando livro: " + textFieldBookName.getText()));
         listButton.addActionListener(e -> System.out.println("Listando todos os livros"));
 

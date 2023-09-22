@@ -3,23 +3,21 @@ import javax.swing.*;
 import java.sql.*;
 public class MainApplication {
     public static void main(String[] args) throws SQLException {
-        System.out.println("Meu projeto com banco de dados");
+        System.out.println("Projeto de Sistemas - Valdinei");
         //DriverManager - Connection - ResultSet - PreparedStatement
-        String pesquisa = "select *from alunos";
-        String cadastro = "insert into alunos (nome, ra) values (?, ?)";
-        Connection connect = DriverManager.getConnection("jdbc:sqlite:unidombosco.db");
+        String pesquisa = "select * from categorias";
+        String cadastro = "insert into categorias (nome) values (?)";
+        Connection connect = DriverManager.getConnection("jdbc:sqlite:biblioteca.db");
         //Inserir um cadastro
-        String nome = JOptionPane.showInputDialog("Nome:");
-        String ra = JOptionPane.showInputDialog("RA:");
+        String nome = JOptionPane.showInputDialog("Nome da Categoria:");
         PreparedStatement insercao = connect.prepareStatement(cadastro);
         insercao.setString(1, nome);
-        insercao.setString(2, ra);
         insercao.execute();
         //Ler todos os valores do banco
         PreparedStatement stmt = connect.prepareStatement(pesquisa);
-        ResultSet alunos = stmt.executeQuery();
-        while(alunos.next()){
-            System.out.println(alunos.getString("nome") + " - " + alunos.getString("id"));
+        ResultSet categorias = stmt.executeQuery();
+        while(categorias.next()){
+            System.out.println(categorias.getString("nome") + " - " + categorias.getString("id"));
         }
 
     }

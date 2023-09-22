@@ -29,7 +29,7 @@ public class AuthorCRUD extends JFrame {
         panel.add(textFieldNationality);
 
         addButton = new JButton("Adicionar");
-        updateButton = new JButton("Atualizar");
+        updateButton = new JButton("Editar");
         deleteButton = new JButton("Deletar");
         listButton = new JButton("Listar");
 
@@ -39,7 +39,7 @@ public class AuthorCRUD extends JFrame {
         panel.add(listButton);
 
         addButton.addActionListener(e -> System.out.println("Adicionando autor: " + textFieldAuthorName.getText()));
-        updateButton.addActionListener(e -> System.out.println("Atualizando autor: " + textFieldAuthorName.getText()));
+        updateButton.addActionListener(e -> System.out.println("Editando autor: " + textFieldAuthorName.getText()));
         deleteButton.addActionListener(e -> System.out.println("Deletando autor: " + textFieldAuthorName.getText()));
         listButton.addActionListener(e -> System.out.println("Listando todos os autores"));
 
