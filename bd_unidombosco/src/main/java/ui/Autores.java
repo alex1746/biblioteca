@@ -2,14 +2,12 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class AuthorCRUD extends JFrame {
+public class Autores extends JFrame {
     private JTextField textFieldAuthorName, textFieldNationality;
     private JButton addButton, updateButton, deleteButton, listButton;
 
-    public AuthorCRUD() {
+    public Autores() {
         setTitle("Gerenciamento de Autores");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

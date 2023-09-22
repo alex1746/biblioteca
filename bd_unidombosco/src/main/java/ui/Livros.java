@@ -2,14 +2,12 @@ package ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class BookCRUD extends JFrame {
+public class Livros extends JFrame {
     private JTextField textFieldBookName, textFieldYear;
     private JButton addButton, updateButton, deleteButton, listButton;
 
-    public BookCRUD() {
+    public Livros() {
         setTitle("Gerenciamento de Livros");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
