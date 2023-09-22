@@ -1,17 +1,15 @@
 package ui;
 
-import app.Categoria;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-public class MainApp extends JFrame {
+public class Main extends JFrame {
     private JButton bookButton, authorButton, categoryButton;
 
-    public MainApp() {
+    public Main() {
 
         setTitle("Sistema de Gerenciamento de Biblioteca");
         setSize(300, 200);
@@ -32,14 +30,14 @@ public class MainApp extends JFrame {
         bookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new BookCRUD().setVisible(true);
+                new Livros().setVisible(true);
             }
         });
 
         authorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new AuthorCRUD().setVisible(true);
+                new Autores().setVisible(true);
             }
         });
 
@@ -47,7 +45,7 @@ public class MainApp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    new CategoryCRUD().setVisible(true);
+                    new Categorias().setVisible(true);
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -60,7 +58,7 @@ public class MainApp extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainApp().setVisible(true);
+                new Main().setVisible(true);
             }
         });
     }
