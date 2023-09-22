@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class CategoryCRUD extends JFrame {
     private JTextField textFieldCategoryName;
-    private JButton addButton, updateButton, deleteButton, listButton;
+    private JButton addButton, editButton, deleteButton, listButton;
     private Connection connect;
     private String cadastro = "INSERT INTO categorias (nome) VALUES (?)";
 
@@ -31,13 +31,13 @@ public class CategoryCRUD extends JFrame {
 
         // Botões para as operações de CRUD
         addButton = new JButton("Adicionar");
-        updateButton = new JButton("Editar");
+        editButton = new JButton("Editar");
         deleteButton = new JButton("Deletar");
         listButton = new JButton("Listar");
 
         // Adiciona os botões ao painel
         panel.add(addButton);
-        panel.add(updateButton);
+        panel.add(editButton);
         panel.add(deleteButton);
         panel.add(listButton);
 
@@ -53,11 +53,20 @@ public class CategoryCRUD extends JFrame {
             }
         });
 
-        updateButton.addActionListener(new ActionListener() {
+        editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código para atualizar uma categoria
-                System.out.println("Editando categoria: " + textFieldCategoryName.getText());
+                // Obtém o ID da categoria a ser editada e o novo nome da categoria
+                String idCategoria = JOptionPane.showInputDialog("ID da Categoria a Editar:");
+                String novoNomeCategoria = JOptionPane.showInputDialog("Novo Nome da Categoria:");
+
+                // Verifica se o ID e o novo nome são válidos (não vazios)
+                if (idCategoria != null && !idCategoria.trim().isEmpty() &&
+                        novoNomeCategoria != null && !novoNomeCategoria.trim().isEmpty()) {
+                    editarCategoria(idCategoria, novoNomeCategoria);
+                } else {
+                    JOptionPane.showMessageDialog(null, "ID ou Nome da Categoria inválido(s)");
+                }
             }
         });
 
@@ -106,6 +115,47 @@ public class CategoryCRUD extends JFrame {
             }
         }
     }
+
+    public void editarCategoria(String idCategoria, String novoNomeCategoria) {
+        String selectQuery = "SELECT id, nome FROM categorias WHERE id = ?";
+        String updateQuery = "UPDATE categorias SET nome = ? WHERE id = ?";
+
+        PreparedStatement selectStmt = null;
+        PreparedStatement updateStmt = null;
+
+        try {
+            selectStmt = connect.prepareStatement(selectQuery);
+            selectStmt.setString(1, idCategoria);
+            ResultSet resultSet = selectStmt.executeQuery();
+
+            if (resultSet.next()) {
+                int categoriaID = resultSet.getInt("id");
+                String nomeCategoriaAtual = resultSet.getString("nome");
+
+                updateStmt = connect.prepareStatement(updateQuery);
+                updateStmt.setString(1, novoNomeCategoria);
+                updateStmt.setString(2, idCategoria);
+                updateStmt.executeUpdate();
+
+                System.out.println("Categoria editada: ID=" + categoriaID + ", Nome antigo=" + nomeCategoriaAtual + ", Novo nome=" + novoNomeCategoria);
+            } else {
+                System.out.println("Nenhuma categoria encontrada com o ID: " + idCategoria);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (selectStmt != null) {
+                    selectStmt.close();
+                }
+                if (updateStmt != null) {
+                    updateStmt.close();
+                }
+            } catch (SQLException ex) {
+            }
+        }
+    }
+
 
     public void deletarCategoria(String idCategoria) {
         String selectQuery = "SELECT id, nome FROM categorias WHERE id = ?";
