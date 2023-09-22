@@ -57,7 +57,32 @@ public class CategoryCRUD extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Obtém o ID da categoria a ser editada e o novo nome da categoria
+
+                System.out.println("Listando todas as categorias");
+                String query = "SELECT id, nome FROM categorias";
+                PreparedStatement consulta = null;
+                try {
+                    consulta = connect.prepareStatement(query);
+                    ResultSet resultSet = consulta.executeQuery();
+
+                    while (resultSet.next()) {
+                        int idCategoria = resultSet.getInt("id");
+                        String nomeCategoria = resultSet.getString("nome");
+                        System.out.println(idCategoria + " " + nomeCategoria);
+                    }
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } finally {
+                    try {
+                        if (consulta != null) {
+                            consulta.close();
+                        }
+                    } catch (SQLException ex) {
+                    }
+                }
+
                 String idCategoria = JOptionPane.showInputDialog("ID da Categoria a Editar:");
+
                 String novoNomeCategoria = JOptionPane.showInputDialog("Novo Nome da Categoria:");
 
                 // Verifica se o ID e o novo nome são válidos (não vazios)
@@ -66,9 +91,12 @@ public class CategoryCRUD extends JFrame {
                     editarCategoria(idCategoria, novoNomeCategoria);
                 } else {
                     JOptionPane.showMessageDialog(null, "ID ou Nome da Categoria inválido(s)");
+
+
                 }
             }
         });
+
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
@@ -137,7 +165,7 @@ public class CategoryCRUD extends JFrame {
                 updateStmt.setString(2, idCategoria);
                 updateStmt.executeUpdate();
 
-                System.out.println("Categoria editada: ID=" + categoriaID + ", Nome antigo=" + nomeCategoriaAtual + ", Novo nome=" + novoNomeCategoria);
+                System.out.println("Categoria editada: ID= " + categoriaID + ", Nome antigo= " + nomeCategoriaAtual + ", Novo nome= " + novoNomeCategoria);
             } else {
                 System.out.println("Nenhuma categoria encontrada com o ID: " + idCategoria);
             }
@@ -180,7 +208,7 @@ public class CategoryCRUD extends JFrame {
                 deleteStmt.executeUpdate();
 
                 // Imprime o ID e o nome da categoria excluída
-                System.out.println("Categoria excluída: ID=" + categoriaID + ", Nome=" + nomeCategoria);
+                System.out.println("Categoria excluída: ID= " + categoriaID + ", Nome= " + nomeCategoria);
             } else {
                 System.out.println("Nenhuma categoria encontrada com o ID: " + idCategoria);
             }
