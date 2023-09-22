@@ -37,7 +37,11 @@ public class Main extends JFrame {
         authorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Autores().setVisible(true);
+                try {
+                    new Autores().setVisible(true);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
