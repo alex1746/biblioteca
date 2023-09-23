@@ -13,6 +13,33 @@ public class Autores extends JFrame {
     private Connection connect;
     private String cadastro = "INSERT INTO autores (nome, nacionalidade) VALUES (?, ?)";
 
+    public String obterNomeAutorPorID(String idAutor) {
+        String query = "SELECT nome FROM autores WHERE id = ?";
+        PreparedStatement consulta = null;
+
+        try {
+            consulta = connect.prepareStatement(query);
+            consulta.setString(1, idAutor);
+            ResultSet resultSet = consulta.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString("nome");
+            } else {
+                return "Autor não encontrado";
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+            } catch (SQLException ex) {
+            }
+        }
+    }
+
+
     public Autores() throws SQLException {
         setTitle("Cadastro de Autores");
         setSize(400, 200);
@@ -272,6 +299,7 @@ public class Autores extends JFrame {
             }
         }
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

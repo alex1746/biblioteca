@@ -6,11 +6,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
+
+
 public class Categorias extends JFrame {
     private JTextField textFieldCategoryName;
     private JButton addButton, editButton, deleteButton, listButton;
     private Connection connect;
     private String cadastro = "INSERT INTO categorias (nome) VALUES (?)";
+
+    public String obterNomeCategoriaPorID(String idAutor) {
+        String query = "SELECT nome FROM categorias WHERE id = ?";
+        PreparedStatement consulta = null;
+
+        try {
+            consulta = connect.prepareStatement(query);
+            consulta.setString(1, idAutor);
+            ResultSet resultSet = consulta.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString("nome");
+            } else {
+                return "Categoria não encontrado";
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+            } catch (SQLException ex) {
+            }
+        }
+    }
 
     public Categorias() throws SQLException {
         setTitle("Cadastro de Categorias");
