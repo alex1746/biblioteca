@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
+
 public class Autores extends JFrame {
     private JButton addButton, editButton, deleteButton, listButton;
     private JTextField textFieldNationality;
@@ -45,7 +46,7 @@ public class Autores extends JFrame {
                 if (nomeAutor != null && !nomeAutor.isEmpty() &&
                         nacionalidade != null && !nacionalidade.isEmpty()) {
                     inserirAutores(nomeAutor, nacionalidade);
-                    System.out.println("Novo autor registrado: " + nomeAutor + ", " + nacionalidade);
+                    System.out.println("Novo autor cadastrado: " + nomeAutor + ", " + nacionalidade);
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação cancelada ou dados inválidos. Nenhum autor foi cadastrado.");
                 }
@@ -187,7 +188,7 @@ public class Autores extends JFrame {
                 updateStmt.setString(3, idAutor);
                 updateStmt.executeUpdate();
 
-                System.out.println("Autor: " + nomeAutorAtual + ", " + nacionalidadeAutorAtual + " editado com sucesso para " + novoNomeAutor + ", " + novaNacionalidade);
+                System.out.println("Autor: " + nomeAutorAtual + ", " + nacionalidadeAutorAtual + " foi editado com sucesso para " + novoNomeAutor + ", " + novaNacionalidade);
             } else {
                 System.out.println("Nenhum autor encontrado com o ID: " + idAutor);
             }
@@ -281,6 +282,10 @@ public class Autores extends JFrame {
                     throw new RuntimeException(e);
                 }
             }
-        });
+        }
+
+        );
+
     }
 }
+

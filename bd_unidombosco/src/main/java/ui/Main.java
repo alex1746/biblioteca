@@ -30,7 +30,11 @@ public class Main extends JFrame {
         bookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Livros().setVisible(true);
+                try {
+                    new Livros().setVisible(true);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
