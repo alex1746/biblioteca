@@ -131,7 +131,9 @@ public class Livros extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Solicita o ID do livro
+                System.out.println("");
                 System.out.println("Listando livros:");
+                System.out.println("");
                 String query = "SELECT id, nome, ano, id_autor, id_categoria FROM livros";
                 PreparedStatement consulta = null;
                 try {
@@ -146,7 +148,7 @@ public class Livros extends JFrame {
                         String idCategoria = resultSet.getString("id_categoria");
                         String nomeAutor = autores.obterNomeAutorPorID(idAutor);
                         String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
-                        System.out.println(idLivro + " - " + nomeLivro + ", " + anoLivro + ", " + nomeAutor + ", " + nomeCategoria);
+                        System.out.println(idLivro + " - " + nomeLivro + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -174,7 +176,6 @@ public class Livros extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Código para listar todas os livros
-                System.out.println("Listando livros:");
                 listarLivros();
             }
         });
@@ -204,6 +205,9 @@ public class Livros extends JFrame {
     }
 
     public void editarLivro(String idLivro, String novoNomeLivro, String novoAnoLivro, String novoIdAutor, String novoIdCategoria) {
+        System.out.println("");
+        System.out.println("Listando livros:");
+        System.out.println("");
         String updateQuery = "UPDATE livros SET nome = ?, ano = ?, id_autor = ?, id_categoria = ? WHERE id = ?";
         PreparedStatement updateStmt = null;
 
@@ -218,7 +222,7 @@ public class Livros extends JFrame {
             int rowsAffected = updateStmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Livro com ID " + idLivro + " foi editado com sucesso!");
+                System.out.println("Livro editado com sucesso!");
             } else {
                 System.out.println("Nenhum livro encontrado com o ID: " + idLivro);
             }
@@ -259,7 +263,7 @@ public class Livros extends JFrame {
                 deleteStmt.executeUpdate();
 
                 // Imprime o ID e o nome do livro excluído
-                System.out.println("Livro " + nomeLivro + " foi excluído com sucesso!");
+                System.out.println("Livro: " + livroID + " - " + nomeLivro + " excluído com sucesso!");
             } else {
                 System.out.println("Nenhum livro encontrado com o ID: " + idLivro);
             }
@@ -279,6 +283,9 @@ public class Livros extends JFrame {
     }
 
     public void listarLivros() {
+        System.out.println("");
+        System.out.println("Listando livros:");
+        System.out.println("");
         String query = "SELECT id, nome, ano, id_autor, id_categoria FROM livros";
         PreparedStatement consulta = null;
 
@@ -287,14 +294,14 @@ public class Livros extends JFrame {
             ResultSet resultSet = consulta.executeQuery();
 
             while (resultSet.next()) {
-                int idLivros = resultSet.getInt("id");
-                String nomeLivros = resultSet.getString("nome");
+                int idLivro = resultSet.getInt("id");
+                String nomeLivro = resultSet.getString("nome");
                 String anoLivro = resultSet.getString("ano");
                 String idAutor = resultSet.getString("id_autor");
                 String nomeAutor = autores.obterNomeAutorPorID(idAutor);
                 String idCategoria = resultSet.getString("id_categoria");
                 String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
-                System.out.println(idLivros + " - " + nomeLivros + ", " + anoLivro + ", " + nomeAutor + ", " + nomeCategoria );
+                System.out.println(idLivro + " - " + nomeLivro + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);

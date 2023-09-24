@@ -26,7 +26,7 @@ public class Categorias extends JFrame {
             if (resultSet.next()) {
                 return resultSet.getString("nome");
             } else {
-                return "Categoria não encontrado";
+                return "Categoria não encontrada";
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -74,6 +74,7 @@ public class Categorias extends JFrame {
                 String nome = JOptionPane.showInputDialog("Nome da Categoria:");
                 if (nome != null && !nome.isEmpty()) {
                     inserirCategoria(nome);
+                    System.out.println("");
                     System.out.println("Nova categoria cadastrada: " + nome);
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação cancelada ou nome de categoria vazio. Nenhuma categoria cadastrada.");
@@ -85,9 +86,10 @@ public class Categorias extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Obtém o ID da categoria a ser editada e o novo nome da categoria
-
+                System.out.println("");
                 System.out.println("Listando categorias:");
                 String query = "SELECT id, nome FROM categorias";
+                System.out.println("");
                 PreparedStatement consulta = null;
                 try {
                     consulta = connect.prepareStatement(query);
@@ -113,7 +115,7 @@ public class Categorias extends JFrame {
 
                 String novoNomeCategoria = JOptionPane.showInputDialog("Insira um novo nome para a categoria:");
 
-                // Verifica se o ID e o novo nome são válidos (não vazios)
+                // Verifica se o ID e o novo nome são válidos
                 if (idCategoria != null && !idCategoria.trim().isEmpty() &&
                         novoNomeCategoria != null && !novoNomeCategoria.trim().isEmpty()) {
                     editarCategoria(idCategoria, novoNomeCategoria);
@@ -130,7 +132,9 @@ public class Categorias extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Solicita o ID da Categoria
+                System.out.println("");
                 System.out.println("Listando categorias:");
+                System.out.println("");
                 String query = "SELECT id, nome FROM categorias";
                 PreparedStatement consulta = null;
                 try {
@@ -152,10 +156,10 @@ public class Categorias extends JFrame {
                     } catch (SQLException ex) {
                     }
                 }
-                String idCategoria = JOptionPane.showInputDialog("Insira o ID da categoria que deseja excluir:");
-                String nomeCategoria = ("nome");
 
-                // Verifica se o ID é válido (não vazio)
+                String idCategoria = JOptionPane.showInputDialog("Insira o ID da categoria que deseja excluir:");
+
+                // Verifica se o ID não é vazio
                 if (idCategoria != null && !idCategoria.trim().isEmpty()) {
                     deletarCategoria(idCategoria);
                 } else {
@@ -167,8 +171,10 @@ public class Categorias extends JFrame {
         listButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código para listar todas as categorias
+                // Código para listar categorias existentes
+                System.out.println("");
                 System.out.println("Listando categorias:");
+                System.out.println("");
                 listarCategorias();
             }
         });
@@ -213,8 +219,8 @@ public class Categorias extends JFrame {
                 updateStmt.setString(1, novoNomeCategoria);
                 updateStmt.setString(2, idCategoria);
                 updateStmt.executeUpdate();
-
-                System.out.println("Categoria " + nomeCategoriaAtual + " editada com sucesso para " + novoNomeCategoria);
+                System.out.println("");
+                System.out.println("Categoria " + nomeCategoriaAtual + " editada com sucesso para: " + novoNomeCategoria);
             } else {
                 System.out.println("Nenhuma categoria encontrada com o ID: " + idCategoria);
             }
@@ -256,8 +262,9 @@ public class Categorias extends JFrame {
                 deleteStmt.setString(1, idCategoria);
                 deleteStmt.executeUpdate();
 
-                // Imprime o ID e o nome da categoria excluída
-                System.out.println("Categoria " + nomeCategoria + " excluída com sucesso!");
+                // Imprime o nome da categoria excluída
+                System.out.println("");
+                System.out.println("Categoria: " + categoriaID + " - " + nomeCategoria + " excluída com sucesso!");
             } else {
                 System.out.println("Nenhuma categoria encontrada com o ID: " + idCategoria);
             }

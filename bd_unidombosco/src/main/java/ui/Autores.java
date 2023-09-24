@@ -73,6 +73,7 @@ public class Autores extends JFrame {
                 if (nomeAutor != null && !nomeAutor.isEmpty() &&
                         nacionalidade != null && !nacionalidade.isEmpty()) {
                     inserirAutores(nomeAutor, nacionalidade);
+                    System.out.println("");
                     System.out.println("Novo autor cadastrado: " + nomeAutor + ", " + nacionalidade);
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação cancelada ou dados inválidos. Nenhum autor foi cadastrado.");
@@ -83,7 +84,9 @@ public class Autores extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("");
                 System.out.println("Listando Autores:");
+                System.out.println("");
                 String query = "SELECT id, nome, nacionalidade FROM autores";
                 PreparedStatement consulta = null;
                 try {
@@ -127,7 +130,9 @@ public class Autores extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("");
                 System.out.println("Listando Autores:");
+                System.out.println("");
                 String query = "SELECT id, nome, nacionalidade FROM autores";
                 PreparedStatement consulta = null;
 
@@ -166,7 +171,9 @@ public class Autores extends JFrame {
         listButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("");
                 System.out.println("Listando Autores:");
+                System.out.println("");
                 listarAutores();
             }
         });
@@ -214,8 +221,8 @@ public class Autores extends JFrame {
                 updateStmt.setString(2, novaNacionalidade);
                 updateStmt.setString(3, idAutor);
                 updateStmt.executeUpdate();
-
-                System.out.println("Autor: " + nomeAutorAtual + ", " + nacionalidadeAutorAtual + " foi editado com sucesso para " + novoNomeAutor + ", " + novaNacionalidade);
+                System.out.println("");
+                System.out.println("Autor: " + nomeAutorAtual + ", " + nacionalidadeAutorAtual + " foi editado com sucesso para: " + novoNomeAutor + ", " + novaNacionalidade);
             } else {
                 System.out.println("Nenhum autor encontrado com o ID: " + idAutor);
             }
@@ -254,8 +261,8 @@ public class Autores extends JFrame {
                 deleteStmt = connect.prepareStatement(deleteQuery);
                 deleteStmt.setString(1, idAutor);
                 deleteStmt.executeUpdate();
-
-                System.out.println("Autor " + nomeAutor + " excluído com sucesso!");
+                System.out.println("");
+                System.out.println("Autor: " + autorID + " - " + nomeAutor + " excluído com sucesso!");
             } else {
                 System.out.println("Nenhum autor encontrado com o ID: " + idAutor);
             }
@@ -303,14 +310,14 @@ public class Autores extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new Autores().setVisible(true);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+                                       public void run() {
+                                           try {
+                                               new Autores().setVisible(true);
+                                           } catch (SQLException e) {
+                                               throw new RuntimeException(e);
+                                           }
+                                       }
+                                   }
 
         );
 
