@@ -222,7 +222,6 @@ public class Livros extends JFrame {
             int rowsAffected = updateStmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Livro editado com sucesso!");
             } else {
                 System.out.println("Nenhum livro encontrado com o ID: " + idLivro);
             }
