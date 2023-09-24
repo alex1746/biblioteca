@@ -87,8 +87,50 @@ public class Livros extends JFrame {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Obtém o ID do livro a ser editado e o novo nome do livro
 
+                listarLivros();
+
+                String idLivro = JOptionPane.showInputDialog("Insira o ID do livro que deseja editar:");
+
+                if (idLivro != null && !idLivro.isEmpty()) {
+
+                    String novoNomeLivro = JOptionPane.showInputDialog("Insira um novo nome para o livro:");
+                    String novoAnoLivro = JOptionPane.showInputDialog("Insira um novo ano para o livro:");
+
+                    System.out.println("");
+                    System.out.println("Listando Autores:");
+                    System.out.println("");
+                    autores.listarAutores();
+                    String idAutor = JOptionPane.showInputDialog("Insira um novo ID de autor para o livro:");
+                    String nomeAutor = autores.obterNomeAutorPorID(idAutor);
+
+
+                    System.out.println("");
+                    System.out.println("Listando categorias:");
+                    System.out.println("");
+                    categorias.listarCategorias();
+                    System.out.println("");
+
+                    String novoIdCategoria = JOptionPane.showInputDialog("Insira um novo ID de categoria para o livro:");
+
+                    if (novoNomeLivro != null && novoAnoLivro != null && idAutor != null && novoIdCategoria != null) {
+                        editarLivro(idLivro, novoNomeLivro, novoAnoLivro, idAutor, novoIdCategoria);
+                        System.out.println("Livro editado com sucesso!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Preencha todos os campos corretamente.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "ID do livro inválido.");
+                }
+            }
+        });
+
+
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Solicita o ID do livro
                 System.out.println("Listando livros:");
                 String query = "SELECT id, nome, ano, id_autor, id_categoria FROM livros";
                 PreparedStatement consulta = null;
@@ -102,52 +144,9 @@ public class Livros extends JFrame {
                         String anoLivro = resultSet.getString("ano");
                         String idAutor = resultSet.getString("id_autor");
                         String idCategoria = resultSet.getString("id_categoria");
-
-                        System.out.println(idLivro + " - " + nomeLivro);
-                    }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                } finally {
-                    try {
-                        if (consulta != null) {
-                            consulta.close();
-                        }
-                    } catch (SQLException ex) {
-                    }
-                }
-
-                String idLivro = JOptionPane.showInputDialog("Insira o ID do livro que deseja editar:");
-
-                String novoNomeLivro = JOptionPane.showInputDialog("Insira um novo nome para o livro:");
-
-                String novoAnoLivro = JOptionPane.showInputDialog("Insira um novo ano para o livro:");
-
-                String novoAutorLivro = JOptionPane.showInputDialog("Insira um novo autor para o livro:");
-
-                String novaCategoriaLivro = JOptionPane.showInputDialog("Insira uma nova categoria para o livro:");
-
-                // Verifica se o ID e o novo nome são válidos (não vazios)
-
-
-                }
-        });
-
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Solicita o ID do livro
-                System.out.println("Listando livros:");
-                String query = "SELECT id, nome FROM livros";
-                PreparedStatement consulta = null;
-                try {
-                    consulta = connect.prepareStatement(query);
-                    ResultSet resultSet = consulta.executeQuery();
-
-                    while (resultSet.next()) {
-                        int idLivro = resultSet.getInt("id");
-                        String nomeLivro = resultSet.getString("nome");
-                        System.out.println(idLivro + " - " + nomeLivro);
+                        String nomeAutor = autores.obterNomeAutorPorID(idAutor);
+                        String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
+                        System.out.println(idLivro + " - " + nomeLivro + ", " + anoLivro + ", " + nomeAutor + ", " + nomeCategoria);
                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -204,48 +203,34 @@ public class Livros extends JFrame {
         }
     }
 
-    public void editarLivro(String novoidLivro, String novonomeLivro, String novoanoLivro, String novoidAutor, String novoidCategoria) {
-        String selectQuery = "SELECT id, nome, ano, id_autor, id_categoria FROM livros WHERE id = ?";
-        String updateQuery = "UPDATE livros SET nome = ?, ano = ?, id_autor = ?, id_categoria = ?, WHERE id = ?";
-        PreparedStatement selectStmt = null;
+    public void editarLivro(String idLivro, String novoNomeLivro, String novoAnoLivro, String novoIdAutor, String novoIdCategoria) {
+        String updateQuery = "UPDATE livros SET nome = ?, ano = ?, id_autor = ?, id_categoria = ? WHERE id = ?";
         PreparedStatement updateStmt = null;
 
         try {
-            selectStmt = connect.prepareStatement(selectQuery);
-            selectStmt.setString(1, novoidLivro);
-            selectStmt.setString(2, novonomeLivro);
-            selectStmt.setString(3, novoanoLivro);
-            selectStmt.setString(4, novoidAutor);
-            selectStmt.setString(5, novoidCategoria);
-            ResultSet resultSet = selectStmt.executeQuery();
+            updateStmt = connect.prepareStatement(updateQuery);
+            updateStmt.setString(1, novoNomeLivro);
+            updateStmt.setString(2, novoAnoLivro);
+            updateStmt.setString(3, novoIdAutor);
+            updateStmt.setString(4, novoIdCategoria);
+            updateStmt.setString(5, idLivro);
 
-            if (resultSet.next()) {
-                int livroID = resultSet.getInt("id");
-                String nomeLivroAtual = resultSet.getString("nome");
+            int rowsAffected = updateStmt.executeUpdate();
 
-                updateStmt = connect.prepareStatement(updateQuery);
-                updateStmt.setString(1, novoidLivro);
-                updateStmt.setString(2, novonomeLivro);
-                updateStmt.setString(3, novoanoLivro);
-                updateStmt.setString(4, novoidAutor);
-                updateStmt.setString(5, novoidCategoria);
-                updateStmt.executeUpdate();
-
-                System.out.println("O livro " + nomeLivroAtual + " foi editado com sucesso para " + novonomeLivro);
+            if (rowsAffected > 0) {
+                System.out.println("Livro com ID " + idLivro + " foi editado com sucesso!");
             } else {
-                System.out.println("Nenhum livro encontrado com o ID: " + novoidLivro);
+                System.out.println("Nenhum livro encontrado com o ID: " + idLivro);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
             try {
-                if (selectStmt != null) {
-                    selectStmt.close();
-                }
                 if (updateStmt != null) {
                     updateStmt.close();
                 }
             } catch (SQLException ex) {
+                // Lidar com exceções
             }
         }
     }
