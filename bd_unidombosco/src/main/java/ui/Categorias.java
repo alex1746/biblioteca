@@ -10,9 +10,15 @@ import java.sql.*;
 
 public class Categorias extends JFrame {
     private JTextField textFieldCategoryName;
+
+    // Botões do painel de categorias
     private JButton addButton, editButton, deleteButton, listButton;
     private Connection connect;
+
+    // Inserir dentro do banco de dados o nome das categorias
     private String cadastro = "INSERT INTO categorias (nome) VALUES (?)";
+
+    // Obter nome da categoria por ID para retornar o nome e não ID na hora de listar
 
     public String obterNomeCategoriaPorID(String idAutor) {
         String query = "SELECT nome FROM categorias WHERE id = ?";
@@ -40,6 +46,8 @@ public class Categorias extends JFrame {
         }
     }
 
+    // Vincula a parte do painel e funções no banco de dados, configura o painel
+
     public Categorias() throws SQLException {
         setTitle("Cadastro de Categorias");
         setSize(400, 200);
@@ -66,7 +74,7 @@ public class Categorias extends JFrame {
         panel.add(deleteButton);
 
 
-        // Eventos dos botões
+        // Botão para adicionar categorias
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,6 +89,8 @@ public class Categorias extends JFrame {
                 }
             }
         });
+
+        // Botão para editar categorias
 
         editButton.addActionListener(new ActionListener() {
             @Override
@@ -128,6 +138,8 @@ public class Categorias extends JFrame {
         });
 
 
+        // Botão para deletar categorias
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,6 +180,8 @@ public class Categorias extends JFrame {
             }
         });
 
+        // Botão para listar as categorias
+
         listButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -181,6 +195,9 @@ public class Categorias extends JFrame {
 
         add(panel);
     }
+
+    // Função dos botões
+    // Adicionar categorias e colocar no SQL
 
     public void inserirCategoria(String nomeCategoria) {
         PreparedStatement insercao = null;
@@ -199,6 +216,8 @@ public class Categorias extends JFrame {
             }
         }
     }
+
+    // Editar categorias puxando o ID, nome e nacionalidade e atualizando para as novas informações, colocando no SQL
 
     public void editarCategoria(String idCategoria, String novoNomeCategoria) {
         String selectQuery = "SELECT id, nome FROM categorias WHERE id = ?";
@@ -239,6 +258,8 @@ public class Categorias extends JFrame {
         }
     }
 
+
+    // Deletar categorias por ID e atualizar no SQL
 
     public void deletarCategoria(String idCategoria) {
         String selectQuery = "SELECT id, nome FROM categorias WHERE id = ?";
@@ -282,6 +303,8 @@ public class Categorias extends JFrame {
             }
         }
     }
+
+    // Listar categorias
 
     public void listarCategorias() {
         String query = "SELECT id, nome FROM categorias";

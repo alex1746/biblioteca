@@ -8,10 +8,17 @@ import java.sql.*;
 
 
 public class Autores extends JFrame {
+
+    // Botões do painel de autores
+
     private JButton addButton, editButton, deleteButton, listButton;
     private JTextField textFieldNationality;
     private Connection connect;
+
+    // Inserir o cadastro dentro do banco de dados, nome e nacionalidade dos autores
     private String cadastro = "INSERT INTO autores (nome, nacionalidade) VALUES (?, ?)";
+
+    // Obter nome do autor por ID para retornar o nome e não o ID na hora de listar
 
     public String obterNomeAutorPorID(String idAutor) {
         String query = "SELECT nome FROM autores WHERE id = ?";
@@ -40,6 +47,8 @@ public class Autores extends JFrame {
     }
 
 
+    // Vincula a parte do painel e funções no banco de dados, configura o painel
+
     public Autores() throws SQLException {
         setTitle("Cadastro de Autores");
         setSize(400, 200);
@@ -52,18 +61,21 @@ public class Autores extends JFrame {
         panel.setLayout(new GridLayout(2, 2));
 
         // Botões de operação CRUD
+
         addButton = new JButton("Adicionar");
         listButton = new JButton("Listar");
         editButton = new JButton("Editar");
         deleteButton = new JButton("Excluir");
 
         // Botões do painel
+
         panel.add(addButton);
         panel.add(listButton);
         panel.add(editButton);
         panel.add(deleteButton);
 
-        // Eventos dos botões
+        // Botão para adicionar autores
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,15 +83,17 @@ public class Autores extends JFrame {
                 String nacionalidade = JOptionPane.showInputDialog("Nacionalidade do Autor:");
 
                 if (nomeAutor != null && !nomeAutor.isEmpty() &&
-                        nacionalidade != null && !nacionalidade.isEmpty()) {
-                    inserirAutores(nomeAutor, nacionalidade);
-                    System.out.println("");
-                    System.out.println("Novo autor cadastrado: " + nomeAutor + ", " + nacionalidade);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Operação cancelada ou dados inválidos. Nenhum autor foi cadastrado.");
-                }
+                    nacionalidade != null && !nacionalidade.isEmpty()) {
+                inserirAutores(nomeAutor, nacionalidade);
+                System.out.println("");
+                System.out.println("Novo autor cadastrado: " + nomeAutor + ", " + nacionalidade);
+            } else {
+                JOptionPane.showMessageDialog(null, "Operação cancelada ou dados inválidos. Nenhum autor foi cadastrado.");
+            }
             }
         });
+
+        // Botão para editar autores
 
         editButton.addActionListener(new ActionListener() {
             @Override
@@ -90,15 +104,15 @@ public class Autores extends JFrame {
                 String query = "SELECT id, nome, nacionalidade FROM autores";
                 PreparedStatement consulta = null;
                 try {
-                    consulta = connect.prepareStatement(query);
-                    ResultSet resultSet = consulta.executeQuery();
+                consulta = connect.prepareStatement(query);
+                ResultSet resultSet = consulta.executeQuery();
 
-                    while (resultSet.next()) {
-                        int idAutor = resultSet.getInt("id");
-                        String nomeAutor = resultSet.getString("nome");
-                        String nacionalidade = resultSet.getString("nacionalidade");
-                        System.out.println(idAutor + " - " + nomeAutor + ", " + nacionalidade);
-                    }
+                while (resultSet.next()) {
+                    int idAutor = resultSet.getInt("id");
+                    String nomeAutor = resultSet.getString("nome");
+                    String nacionalidade = resultSet.getString("nacionalidade");
+                    System.out.println(idAutor + " - " + nomeAutor + ", " + nacionalidade);
+                }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } finally {
@@ -126,6 +140,7 @@ public class Autores extends JFrame {
             }
         });
 
+        // Botão para deletar autores
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
@@ -168,6 +183,8 @@ public class Autores extends JFrame {
         });
 
 
+        // Botão para listar autores
+
         listButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -181,12 +198,15 @@ public class Autores extends JFrame {
         add(panel);
     }
 
+    // Função dos botões
+    // Adicionar autores e colocar no SQL
+
     public void inserirAutores(String nomeAutor, String nacionalidade) {
         PreparedStatement insercao = null;
         try {
             insercao = connect.prepareStatement(cadastro);
             insercao.setString(1, nomeAutor);
-            insercao.setString(2, nacionalidade); // Adicione a nacionalidade à query SQL
+            insercao.setString(2, nacionalidade);
             insercao.execute();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -199,6 +219,8 @@ public class Autores extends JFrame {
             }
         }
     }
+
+    // Editar autores puxando o ID, nome e nacionalidade e atualizando para as novas informações, colocando no SQL
 
     public void editarAutor(String idAutor, String novoNomeAutor, String novaNacionalidade) {
         String selectQuery = "SELECT id, nome, nacionalidade FROM autores WHERE id = ?";
@@ -241,6 +263,7 @@ public class Autores extends JFrame {
         }
     }
 
+    // Deletar autores por ID e atualizar no SQL
 
     public void deletarAutor(String idAutor) {
         String selectQuery = "SELECT id, nome FROM autores WHERE id = ?";
@@ -281,6 +304,8 @@ public class Autores extends JFrame {
         }
     }
 
+    // Listar autores
+
     public void listarAutores() {
         String query = "SELECT id, nome, nacionalidade FROM autores";
         PreparedStatement consulta = null;
@@ -310,16 +335,16 @@ public class Autores extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
-                                       public void run() {
-                                           try {
-                                               new Autores().setVisible(true);
-                                           } catch (SQLException e) {
-                                               throw new RuntimeException(e);
-                                           }
-                                       }
-                                   }
+           public void run() {
+               try {
+                   new Autores().setVisible(true);
+               } catch (SQLException e) {
+                   throw new RuntimeException(e);
+               }
+           }
+       }
 
-        );
+    );
 
     }
 }

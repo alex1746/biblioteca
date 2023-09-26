@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class Main extends JFrame {
+
+    // Painel principal para executar os códigos
     private JButton bookButton, authorButton, categoryButton;
 
     public Main() {

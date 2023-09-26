@@ -10,11 +10,21 @@ import java.sql.*;
 
 public class Livros extends JFrame {
     private JTextField textFieldCategoryName;
+
+    // Botões do painel de livros
     private JButton addButton, editButton, deleteButton, listButton;
     private Connection connect;
+
+    // Inserir o cadastro dentro do banco de dados, nome, ano, id_autor e id_categoria dos livros
     private String cadastro = "INSERT INTO livros (nome, ano, id_autor, id_categoria) VALUES (?, ?, ?, ?)";
+
+    // Vincula a classe de autores na classe atual
     private Autores autores;
+
+    // Vincula a classe de categorias na classe atual
     private Categorias categorias;
+
+    // // Vincula a parte do painel e funções no banco de dados, configura o painel
 
     public Livros() throws SQLException {
         setTitle("Cadastro de Livros");
@@ -45,44 +55,44 @@ public class Livros extends JFrame {
         panel.add(deleteButton);
 
 
-        // Eventos dos botões
+        // Botão para adicionar livros
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Código para adicionar um novo livro
-                String nome = JOptionPane.showInputDialog("Nome do Livro:");
-                String anoLivro = JOptionPane.showInputDialog("Ano do Livro:");
+            // Código para adicionar um novo livro
+            String nome = JOptionPane.showInputDialog("Nome do Livro:");
+            String anoLivro = JOptionPane.showInputDialog("Ano do Livro:");
 
-                //Listar autores
-                System.out.println("");
-                System.out.println("Listando Autores:");
-                System.out.println("");
-                autores.listarAutores();
-                String idAutor = JOptionPane.showInputDialog("ID do Autor:");
-                String nomeAutor = autores.obterNomeAutorPorID(idAutor);
+            //Listar autores
+            System.out.println("");
+            System.out.println("Listando Autores:");
+            System.out.println("");
+            autores.listarAutores();
+            String idAutor = JOptionPane.showInputDialog("ID do Autor:");
+            String nomeAutor = autores.obterNomeAutorPorID(idAutor);
 
 
 
-                //Listar categorias
-                System.out.println("");
-                System.out.println("Listando categorias:");
-                System.out.println("");
-                categorias.listarCategorias();
-                System.out.println("");
+            //Listar categorias
+            System.out.println("");
+            System.out.println("Listando categorias:");
+            System.out.println("");
+            categorias.listarCategorias();
+            System.out.println("");
 
-                String idCategoria = JOptionPane.showInputDialog("ID da Categoria:");
-                String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
+            String idCategoria = JOptionPane.showInputDialog("ID da Categoria:");
+            String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
 
-                //AQUI É PARA SER O LISTAR CATEGORIAS
-
-                if (nome != null && !nome.isEmpty()) {
-                    inserirLivro(nome, anoLivro, idAutor, idCategoria);
-                    System.out.println("Novo livro cadastrado: " + nome + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Operação cancelada ou nome do livro vazio. Nenhum livro cadastrado.");
-                }
+            if (nome != null && !nome.isEmpty()) {
+                inserirLivro(nome, anoLivro, idAutor, idCategoria);
+            System.out.println("Novo livro cadastrado: " + nome + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
+            } else {
+                JOptionPane.showMessageDialog(null, "Operação cancelada ou nome do livro vazio. Nenhum livro cadastrado.");
+            }
             }
         });
+
+        // Botão para editar livros
 
         editButton.addActionListener(new ActionListener() {
             @Override
@@ -125,23 +135,23 @@ public class Livros extends JFrame {
             }
         });
 
-
+        // Botão para deletar autores
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Solicita o ID do livro
-                System.out.println("");
-                System.out.println("Listando livros:");
-                System.out.println("");
-                String query = "SELECT id, nome, ano, id_autor, id_categoria FROM livros";
-                PreparedStatement consulta = null;
-                try {
-                    consulta = connect.prepareStatement(query);
-                    ResultSet resultSet = consulta.executeQuery();
+                        // Solicita o ID do livro
+                    System.out.println("");
+                    System.out.println("Listando livros:");
+                    System.out.println("");
+                    String query = "SELECT id, nome, ano, id_autor, id_categoria FROM livros";
+                    PreparedStatement consulta = null;
+                    try {
+                        consulta = connect.prepareStatement(query);
+                        ResultSet resultSet = consulta.executeQuery();
 
                     while (resultSet.next()) {
-                        int idLivro = resultSet.getInt("id");
+                    int idLivro = resultSet.getInt("id");
                         String nomeLivro = resultSet.getString("nome");
                         String anoLivro = resultSet.getString("ano");
                         String idAutor = resultSet.getString("id_autor");
@@ -149,39 +159,44 @@ public class Livros extends JFrame {
                         String nomeAutor = autores.obterNomeAutorPorID(idAutor);
                         String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
                         System.out.println(idLivro + " - " + nomeLivro + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
-                    }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                } finally {
-                    try {
-                        if (consulta != null) {
-                            consulta.close();
                         }
                     } catch (SQLException ex) {
-                    }
-                }
-                String idLivro = JOptionPane.showInputDialog("Insira o ID do livro que deseja excluir:");
-                String nomeLivro = ("nome");
+                        throw new RuntimeException(ex);
+                    } finally {
+                        try {
+                            if (consulta != null) {
+                                    consulta.close();
+                                }
+                            } catch (SQLException ex) {
+                            }
+                        }
+                        String idLivro = JOptionPane.showInputDialog("Insira o ID do livro que deseja excluir:");
+                        String nomeLivro = ("nome");
 
-                // Verifica se o ID é válido (não vazio)
-                if (idLivro != null && !idLivro.trim().isEmpty()) {
-                    deletarLivro(idLivro);
-                } else {
-                    JOptionPane.showMessageDialog(null, "ID do livro inválido");
-                }
+                        // Verifica se o ID é válido (não vazio)
+                        if (idLivro != null && !idLivro.trim().isEmpty()) {
+                            deletarLivro(idLivro);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "ID do livro inválido");
+                    }
             }
         });
+
+        // Botão para listar livros
 
         listButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Código para listar todas os livros
                 listarLivros();
-            }
-        });
+                }
+                });
 
-        add(panel);
-    }
+                add(panel);
+            }
+
+    // Função dos botões
+    // Adicionar livros e colocar no SQL
 
     public void inserirLivro(String nomeLivro, String anoLivro, String idAutor, String idCategoria) {
         PreparedStatement insercao = null;
@@ -203,6 +218,8 @@ public class Livros extends JFrame {
             }
         }
     }
+
+    // Editar livros puxando o ID, nome e ano, idAutor, idCategoria e atualizando para as novas informações, colocando no SQL
 
     public void editarLivro(String idLivro, String novoNomeLivro, String novoAnoLivro, String novoIdAutor, String novoIdCategoria) {
         System.out.println("");
@@ -238,6 +255,7 @@ public class Livros extends JFrame {
         }
     }
 
+    // Deletar livros por ID e atualizar no SQL
 
     public void deletarLivro(String idLivro) {
         String selectQuery = "SELECT id, nome FROM livros WHERE id = ?";
@@ -262,6 +280,8 @@ public class Livros extends JFrame {
                 deleteStmt.executeUpdate();
 
                 // Imprime o ID e o nome do livro excluído
+
+                System.out.println("");
                 System.out.println("Livro: " + livroID + " - " + nomeLivro + " excluído com sucesso!");
             } else {
                 System.out.println("Nenhum livro encontrado com o ID: " + idLivro);
@@ -281,6 +301,8 @@ public class Livros extends JFrame {
         }
     }
 
+    // Listar autores
+
     public void listarLivros() {
         System.out.println("");
         System.out.println("Listando livros:");
@@ -294,14 +316,14 @@ public class Livros extends JFrame {
 
             while (resultSet.next()) {
                 int idLivro = resultSet.getInt("id");
-                String nomeLivro = resultSet.getString("nome");
-                String anoLivro = resultSet.getString("ano");
-                String idAutor = resultSet.getString("id_autor");
-                String nomeAutor = autores.obterNomeAutorPorID(idAutor);
-                String idCategoria = resultSet.getString("id_categoria");
-                String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
-                System.out.println(idLivro + " - " + nomeLivro + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
-            }
+                    String nomeLivro = resultSet.getString("nome");
+                    String anoLivro = resultSet.getString("ano");
+                    String idAutor = resultSet.getString("id_autor");
+                    String nomeAutor = autores.obterNomeAutorPorID(idAutor);
+                    String idCategoria = resultSet.getString("id_categoria");
+                    String nomeCategoria = categorias.obterNomeCategoriaPorID(idCategoria);
+                    System.out.println(idLivro + " - " + nomeLivro + " | Ano: " + anoLivro + " | Autor: " + nomeAutor + " | Categoria: " + nomeCategoria);
+                }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
@@ -312,9 +334,8 @@ public class Livros extends JFrame {
             } catch (SQLException ex) {
             }
         }
-    }
-
-    public static void main(String[] args) {
+     }
+     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
